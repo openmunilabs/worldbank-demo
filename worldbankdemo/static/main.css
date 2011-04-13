@@ -1,0 +1,60 @@
+body
+{
+	margin:0px;
+	font-family:Helvetica;
+}
+
+#logo
+{
+	position:absolute;
+	top:100px;
+	right:0px;
+}
+
+#powered-by
+{
+	position:absolute;
+	bottom:0px;
+	right:10px;
+}
+
+#header
+{
+	margin:10px;
+	color:gray;
+	width:960px;
+	
+}
+
+#who h1, #what h1, #where h1
+{
+	text-transform:uppercase;
+}
+
+#who
+{
+	float:left;
+	width:200px;
+	margin:10px;
+}
+
+#what
+{
+	float:left;
+	width:200px;
+	margin:10px;
+}
+
+#where
+{
+	float:left;
+	width:500px;
+	margin:10px;
+}
+
+#footer
+{
+	margin:10px;
+	color:gray;
+	width:960px;
+}

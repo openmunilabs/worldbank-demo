@@ -1,0 +1,22 @@
+application: worldbankdemo
+version: 1
+runtime: python
+api_version: 1
+
+handlers:
+
+- url: /static
+  static_dir: static
+    
+- url: /sms
+  script: main.py
+
+- url: /json
+  script: main.py
+
+- url: /admin/.*
+  script: admin.py
+  login: required
+
+- url: /
+  script: main.py

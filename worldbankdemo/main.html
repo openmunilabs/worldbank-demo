@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>World Bank Demo</title>
+	<link href="static/main.css" rel="stylesheet" type="text/css">
+
+	<script src="http://code.jquery.com/jquery-1.5.js"></script>
+	<script type="text/javascript"
+	    src="http://maps.google.com/maps/api/js?sensor=false">
+	</script>
+	<script type="text/javascript">
+	 var geocoder;
+	 var map;
+		var n=38.9;
+		var s=38.8;
+		var e=-77;
+		var w=-77.1;
+	
+
+	
+	
+		
+	 function initialize() {
+	    var latlng = new google.maps.LatLng(38.9, -77.1);
+	    var myOptions = {
+	      zoom: 10,
+	      center: latlng,
+	      mapTypeId: google.maps.MapTypeId.ROADMAP
+	    };
+		geocoder = new google.maps.Geocoder();
+	    map = new google.maps.Map(document.getElementById("map_canvas"),
+	        myOptions);
+	
+		
+		$.getJSON('/json', function(data) {
+			//process data
+			
+			for (msg in data.messages)
+			{
+				$('#log').html($('#log').html()+data.messages[msg].phone+": "+data.messages[msg].msg+"<br/>");
+
+				$('#who-content').html($('#who-content').html()+data.messages[msg].name+"<br/>");
+
+				$('#what-content').html($('#what-content').html()+data.messages[msg].need+"<br/>");
+				
+				var location=data.messages[msg].location;
+				geocoder.geocode( { 'address': location}, function(results, status) {
+				      if (status == google.maps.GeocoderStatus.OK) {
+				        map.setCenter(results[0].geometry.location);
+				
+						
+				        var marker = new google.maps.Marker({
+				            map: map, 
+				            position: results[0].geometry.location
+				        });
+
+						//alert(results[0].geometry.location.lat()+" "+results[0].geometry.location.lng());
+						if (n<results[0].geometry.location.lat()) n=results[0].geometry.location.lat();
+						if (s>results[0].geometry.location.lat()) s=results[0].geometry.location.lat();
+
+						if (e<results[0].geometry.location.lng()) e=results[0].geometry.location.lng();
+						if (w>results[0].geometry.location.lng()) w=results[0].geometry.location.lng();
+						//alert(n+" "+s+" "+e+" "+w);
+						map.fitBounds(new google.maps.LatLngBounds(new google.maps.LatLng(s,w),new google.maps.LatLng(n,e)));
+						
+				
+				      } 
+					else {
+				        alert("Geocode was not successful for the following reason: " + status);
+				      }
+				  });
+
+					
+					
+
+				
+			}
+		});
+
+
+	  }
+
+	</script>
+</head>
+<body onload="initialize()">
+<div id="logo"><img src="static/logo.png" width="32px" height="32px"/></div>
+
+<div id="header">
+	<h3>Send SMS to number (202) 540-8993 with message "<b><i>name</i> from <i>location</i> need <i>something</i></b>"</h3>
+</div>
+
+<div id="content">
+	<div id="who">
+		<h1>Who</h1>
+		<div id="who-content"></div>
+	</div>
+	<div id="what">
+		<h1>What</h1>
+		<!--img src="https://chart.googleapis.com/chart?cht=p&chd=s:Uf9a&chs=200x300&chdl=January|February|March|April&chdlp=bv"/-->
+		<div id="what-content"></div>
+	</div>
+	<div id="where">
+		<h1>Where</h1>
+		<div id="map_canvas" style="width:500px; height:400px"></div>
+	</div>
+	
+</div>
+
+<div id="footer">
+	<h3>SMS messages log:</h3>
+	<div id="log"></div>
+</div>
+
+<div id="powered-by">
+<img src="static/powered-by.png"/>
+</div>
+
+</body>
+</html>
